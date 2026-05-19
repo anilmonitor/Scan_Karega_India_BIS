@@ -19,9 +19,11 @@ The SKI platform includes the following user-facing and backend features:
    - Profiles help users align food scanning recommendations to their specific bodily requirements.
    - **Account Deletion Option**: Users can permanently wipe their profile and linked historical scan records from MongoDB.
 
-3. **AI-Powered Food Label Scanner**
-   - Drag-and-drop or file picker support for images (JPEG, PNG, WebP, GIF) up to 10MB.
-   - Integrates with the Google Gemini Pro API (`gemini-2.5-flash` model) to perform OCR and structured data extraction from product labels in real-time.
+3. **Dual-Mode Scanner (Upload & Live Camera)**
+   - Supports both drag-and-drop file upload and real-time device camera scanning.
+   - **Label Capture Mode**: Take a photo of the food ingredients label using a web camera, then send it to the Gemini OCR backend.
+   - **Barcode Scanner Mode**: Point the camera at a product barcode to automatically detect and decode the value (uses browser's native `BarcodeDetector` API) and query the catalog backend. Also provides manual barcode search and quick-test mock buttons for instant lookup testing.
+   - Integrates with the Google Gemini Pro API (`gemini-2.5-flash` model) to perform OCR and structured data extraction from captured product labels.
    - Extracts product name, brand, ingredients list, nutrition facts (energy, fat, saturated fat, sugars, sodium, fiber, proteins), allergens, additives, and NOVA classification.
 
 4. **Dynamic Health Score Engine**
@@ -240,9 +242,10 @@ npm run dev
 - **POST** `/` - Multi-part file upload of label images. Saves the file locally, base64 encodes it, requests Gemini extraction, calculates health score, logs the entry, and returns the analysis.
 - **GET** `/my-scans` - Returns scan history for the current user (newest first).
 
-### 🧪 Standard scoring & scaffolded endpoints
+### 🧪 Standard scoring & product endpoints
 - **POST** `/api/health-score` - Scores a custom JSON product payload.
-- **GET** `/api/products` - Returns a mock product profile.
+- **GET** `/api/products` - Returns a list of mock products in the catalog.
+- **GET** `/api/products/{barcode}` - Looks up a product by barcode, saves the scan entry to MongoDB, and returns the health score results.
 - **GET** `/api/scan` - Returns barcode scanner status message.
 
 ---
