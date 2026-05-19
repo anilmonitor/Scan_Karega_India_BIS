@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import ImageUpload from "./ImageUpload/ImageUpload";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-export default function Home({ token, onLoginClick, user, onScanClick }) {
+export default function Home({ token, onLoginClick, user, onScanClick, onHomeScanSuccess }) {
   const [activeTab, setActiveTab] = useState("unhealthy"); // "unhealthy" or "healthy"
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [mobileCardIndex, setMobileCardIndex] = useState(0);
@@ -687,28 +688,128 @@ export default function Home({ token, onLoginClick, user, onScanClick }) {
         </div>
       </section>
 
-      {/* Gated Scan Promotion Banner */}
-      <section className="section-padding gate-banner-section">
-        <div className="glass-card gate-banner">
-          <h3>Ready to Scan Your Food?</h3>
-          <p style={{ fontStyle: "italic", fontSize: "16px", color: "var(--color-primary-dark)", margin: "4px 0 16px 0", fontWeight: "700" }}>
-            Scan Karega India, Healthy banega India
-          </p>
-          {user ? (
-            <>
-              <p>You are successfully logged in! Access your personal scanner dashboard now to analyze food label ingredients in real-time.</p>
-              <button className="btn-primary" onClick={onScanClick}>
-                Go to Scanner Dashboard
+      {/* Gated Scan Promotion Banner / Interactive Homepage Scanner */}
+      <section className="section-padding gate-banner-section" style={{ borderTop: "1px solid var(--color-border-secondary)", background: "var(--color-background-primary)" }}>
+        <div style={{
+          display: "flex",
+          flexDirection: "row",
+          flexWrap: "wrap",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "40px",
+          maxWidth: "1100px",
+          margin: "0 auto",
+          padding: "0 24px"
+        }}>
+          {/* Text/Info Column */}
+          <div style={{ flex: "1 1 450px", display: "flex", flexDirection: "column", gap: "16px" }}>
+            <span className="section-eyebrow" style={{ textAlign: "left", margin: 0 }}>Instant Analysis</span>
+            <h2 style={{ fontSize: "36px", fontWeight: "900", color: "var(--color-text-primary)", margin: 0, lineHeight: "1.15", fontFamily: "var(--font-heading)" }}>
+              Ready to Scan Your Food?
+            </h2>
+            <p style={{ fontStyle: "italic", fontSize: "16px", color: "var(--color-primary-dark)", margin: "0", fontWeight: "700" }}>
+              Scan Karega India, Healthy banega India
+            </p>
+            <p style={{ fontSize: "15px", color: "var(--color-text-secondary)", lineHeight: "1.6", margin: 0 }}>
+              Use our dual-mode scanner to instantly scan packaged food ingredients. Upload any packaging photo or point your camera to decode barcodes and ingredients list using advanced AI.
+            </p>
+            
+            {user ? (
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "8px" }}>
+                <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#22c55e", display: "inline-block", boxShadow: "0 0 8px #22c55e" }}></span>
+                <span style={{ fontSize: "14px", fontWeight: "700", color: "var(--color-text-primary)" }}>
+                  Connected as {user.name || user.email}
+                </span>
+              </div>
+            ) : (
+              <button 
+                className="btn-primary" 
+                onClick={onLoginClick} 
+                style={{ alignSelf: "flex-start", marginTop: "8px", padding: "12px 24px" }}
+              >
+                Sign In to Save History
               </button>
-            </>
-          ) : (
-            <>
-              <p>Create an account to begin using our real-time AI scanner, track your health ratings, and keep an active record of scanned products.</p>
-              <button className="btn-primary" onClick={onLoginClick}>
-                Sign In to Unlock Scanner
-              </button>
-            </>
-          )}
+            )}
+          </div>
+
+          {/* Interactive Scanner Widget Column */}
+          <div style={{
+            flex: "1 1 420px",
+            maxWidth: "520px",
+            width: "100%",
+            position: "relative",
+            borderRadius: "24px",
+            border: "1px solid var(--color-border-secondary)",
+            background: "var(--glass-bg)",
+            boxShadow: "var(--glass-shadow)",
+            overflow: "hidden"
+          }}>
+            {/* If logged out, render the locking glass overlay */}
+            {!user && (
+              <div style={{
+                position: "absolute",
+                inset: 0,
+                background: "rgba(255, 255, 255, 0.4)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 20,
+                textAlign: "center",
+                padding: "30px",
+                gap: "16px"
+              }}>
+                <div style={{
+                  width: "60px",
+                  height: "60px",
+                  borderRadius: "50%",
+                  background: "var(--color-primary-light)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "var(--color-primary-dark)",
+                  boxShadow: "0 4px 12px rgba(22, 163, 74, 0.15)"
+                }}>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 style={{ fontSize: "20px", fontWeight: "800", color: "var(--color-text-primary)", margin: "0 0 8px 0", fontFamily: "var(--font-heading)" }}>
+                    AI Packaged Food Scanner
+                  </h3>
+                  <p style={{ fontSize: "13px", color: "var(--color-text-secondary)", lineHeight: "1.5", margin: 0, maxWidth: "300px" }}>
+                    Sign in to scan food label nutrition facts and check safe BIS standards instantly.
+                  </p>
+                </div>
+                <button 
+                  className="btn-primary animate-pulse-slow" 
+                  onClick={onLoginClick}
+                  style={{
+                    padding: "12px 28px",
+                    borderRadius: "30px",
+                    fontSize: "14px",
+                    fontWeight: "800",
+                    border: "none",
+                    background: "var(--color-primary)",
+                    color: "#ffffff",
+                    cursor: "pointer",
+                    boxShadow: "0 4px 15px rgba(22, 163, 74, 0.25)"
+                  }}
+                >
+                  Unlock Scanner Now
+                </button>
+              </div>
+            )}
+
+            {/* Render the actual ImageUpload component! */}
+            <div style={{ opacity: user ? 1 : 0.25, pointerEvents: user ? "auto" : "none", transition: "opacity 0.3s" }}>
+              <ImageUpload token={token} onScanSuccess={onHomeScanSuccess} />
+            </div>
+          </div>
         </div>
       </section>
     </div>

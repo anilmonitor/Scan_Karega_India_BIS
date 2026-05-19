@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import ImageUpload from "./ImageUpload/ImageUpload";
 
-export default function Dashboard({ user, token, API_URL, onUserUpdate, onLogout }) {
+export default function Dashboard({ user, token, API_URL, onUserUpdate, onLogout, initialScan, clearInitialScan }) {
   const [activeTab, setActiveTab] = useState("scan"); // "scan" | "history"
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -66,6 +66,15 @@ export default function Dashboard({ user, token, API_URL, onUserUpdate, onLogout
   useEffect(() => {
     fetchHistory();
   }, [token]);
+
+  useEffect(() => {
+    if (initialScan) {
+      setSelectedScan(initialScan);
+      if (clearInitialScan) {
+        clearInitialScan();
+      }
+    }
+  }, [initialScan, clearInitialScan]);
 
   const handleScanSuccess = (scannedItem) => {
     fetchHistory(); // Refresh history list

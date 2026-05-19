@@ -17,6 +17,12 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [authLoading, setAuthLoading] = useState(false);
+  const [homeScanResult, setHomeScanResult] = useState(null);
+
+  const handleHomeScanSuccess = (data) => {
+    setHomeScanResult(data);
+    setActiveView("dashboard");
+  };
   
   // Helper to load view state from url pathname on startup
   const getInitialView = () => {
@@ -154,9 +160,11 @@ export default function App() {
             API_URL={API_URL}
             onUserUpdate={(updatedUser) => setUser(updatedUser)}
             onLogout={handleLogout}
+            initialScan={homeScanResult}
+            clearInitialScan={() => setHomeScanResult(null)}
           />
         ) : (
-          <Home token={token} onLoginClick={handleLoginClick} user={user} onScanClick={() => setActiveView("dashboard")} />
+          <Home token={token} onLoginClick={handleLoginClick} user={user} onScanClick={() => setActiveView("dashboard")} onHomeScanSuccess={handleHomeScanSuccess} />
         )}
       </main>
 
