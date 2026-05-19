@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
-export default function Home({ onLoginClick, user, onScanClick }) {
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
+export default function Home({ token, onLoginClick, user, onScanClick }) {
   const [activeTab, setActiveTab] = useState("unhealthy"); // "unhealthy" or "healthy"
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [mobileCardIndex, setMobileCardIndex] = useState(0);
@@ -13,6 +15,55 @@ export default function Home({ onLoginClick, user, onScanClick }) {
   }, []);
 
   const isMobile = windowWidth <= 768;
+
+  const [scans, setScans] = useState([]);
+  const [loadingScans, setLoadingScans] = useState(false);
+
+  React.useEffect(() => {
+    if (!token) {
+      setScans([]);
+      return;
+    }
+    setLoadingScans(true);
+    fetch(`${API_URL}/api/image-scan/my-scans`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(res => res.ok ? res.json() : [])
+      .then(data => {
+        setScans(data.slice(0, 3));
+        setLoadingScans(false);
+      })
+      .catch(err => {
+        console.error("Home scans fetch failed:", err);
+        setLoadingScans(false);
+      });
+  }, [token]);
+
+  const communityScans = [
+    {
+      _id: "mock-s1",
+      product: { name: "Maggi 2-Minute Noodles", brand: "Nestlé", barcode: "8901058862413" },
+      health_score: { score: 45, label: "Needs Caution", color: "red" },
+      scanned_at: new Date(Date.now() - 3600000 * 2).toISOString(),
+      image_url: "barcode_scan"
+    },
+    {
+      _id: "mock-s2",
+      product: { name: "Kurkure Masala Munch", brand: "Kurkure", barcode: "8901207040510" },
+      health_score: { score: 45, label: "Needs Caution", color: "red" },
+      scanned_at: new Date(Date.now() - 3600000 * 8).toISOString(),
+      image_url: "barcode_scan"
+    },
+    {
+      _id: "mock-s3",
+      product: { name: "i-Drink Mango", brand: "SKI Alternative", barcode: "8901058895053" },
+      health_score: { score: 92, label: "Healthy", color: "green" },
+      scanned_at: new Date(Date.now() - 3600000 * 12).toISOString(),
+      image_url: "barcode_scan"
+    }
+  ];
 
   const sampleProducts = [
     {
@@ -107,11 +158,11 @@ export default function Home({ onLoginClick, user, onScanClick }) {
         <div className="hero-content animate-slide-up" style={{ zIndex: 1 }}>
           <div className="hero-badge">
             <span className="eyebrow-badge-pulse"></span>
-            ⚡ AI-Powered Food Label Scanner
+            ⚡ AI-Powered Packaged Food Scanner
           </div>
           <h1 className="hero-title">
             Know What You Eat.<br />
-            Instant <span className="text-gradient">Food Label Scans</span>.
+            Instant <span className="text-gradient">Packaged Food Scanner</span>.
           </h1>
           <p className="hero-subtitle">
             Upload any packaged food or drink label. Our AI-powered scanner extracts exact ingredients, evaluates nutritional processing quality, and recommends healthier, clean local Indian alternatives instantly.
@@ -527,10 +578,122 @@ export default function Home({ onLoginClick, user, onScanClick }) {
         )}
       </section>
 
+      {/* Recently Scanned Section */}
+      <section className="section-padding recently-scanned-section" style={{ borderTop: "1px solid var(--color-border-secondary)", background: "var(--color-background-secondary)", paddingBottom: "50px", paddingTop: "50px" }}>
+        <div className="section-header">
+          <span className="section-eyebrow">Ratings History</span>
+          <h2 className="section-title">Recently Scanned Products</h2>
+          <p className="section-subtitle">
+            {user && scans.length > 0 
+              ? "Here are the latest packaged food products analyzed by you."
+              : "Here is a live feed of packaged food products recently analyzed by health-conscious users in India."
+            }
+          </p>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "24px", maxWidth: "1000px", margin: "0 auto", padding: "0 24px" }}>
+          {(scans.length > 0 ? scans : communityScans).map((item) => {
+            const score = item.health_score?.score ?? 50;
+            const label = item.health_score?.label ?? "Moderate";
+            const color = item.health_score?.color ?? "yellow";
+            
+            const badgeTheme = {
+              green:  { text: "#15803d", bg: "#f0fdf4", border: "#16a34a22" },
+              yellow: { text: "#a16207", bg: "#fefce8", border: "#ca8a0422" },
+              red:    { text: "#b91c1c", bg: "#fef2f2", border: "#dc262622" }
+            }[color] || { text: "#475569", bg: "#f1f5f9", border: "#cbd5e1" };
+
+            return (
+              <div 
+                key={item._id} 
+                onClick={user ? onScanClick : onLoginClick}
+                className="glass-card" 
+                style={{ 
+                  padding: "24px", 
+                  borderRadius: "18px", 
+                  border: "1px solid var(--color-border-secondary)", 
+                  display: "flex", 
+                  flexDirection: "column", 
+                  gap: "14px",
+                  cursor: "pointer",
+                  transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-4px)";
+                  e.currentTarget.style.boxShadow = "var(--glass-shadow)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "none";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
+                <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+                  {item.image_url === "barcode_scan" ? (
+                    <div style={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: 10,
+                      background: "var(--color-primary-light)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      border: "1px solid var(--color-primary)",
+                      flexShrink: 0
+                    }}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary-dark)" strokeWidth="2.5">
+                        <path d="M3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2z" />
+                        <path d="M7 7h2v10H7zm4 0h1v10h-1zm3 0h3v10h-3zm5 0h1v10h-1z" />
+                      </svg>
+                    </div>
+                  ) : (
+                    <img 
+                      src={item.image_url} 
+                      alt="thumbnail" 
+                      style={{ width: "48px", height: "48px", objectFit: "cover", borderRadius: "10px", border: "1px solid var(--color-border-secondary)", flexShrink: 0 }}
+                      onError={(e) => {
+                        e.target.src = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c";
+                      }}
+                    />
+                  )}
+                  <div style={{ overflow: "hidden" }}>
+                    <h4 style={{ margin: 0, fontSize: "15px", fontWeight: "800", color: "var(--color-text-primary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      {item.product?.name || "Unknown Product"}
+                    </h4>
+                    <span style={{ fontSize: "11px", color: "var(--color-text-secondary)", fontWeight: "700" }}>
+                      {item.product?.brand || "Scanned Food"}
+                    </span>
+                  </div>
+                </div>
+
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto", borderTop: "1px solid var(--color-border-tertiary)", paddingTop: "12px" }}>
+                  <span style={{ fontSize: "11px", color: "var(--color-text-tertiary)", fontWeight: "600" }}>
+                    📅 {new Date(item.scanned_at).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                  </span>
+                  <span style={{
+                    fontSize: "11px", 
+                    fontWeight: "800", 
+                    padding: "3px 10px", 
+                    borderRadius: "12px", 
+                    color: badgeTheme.text, 
+                    background: badgeTheme.bg,
+                    border: `1px solid ${badgeTheme.border}`
+                  }}>
+                    {score}/100 ({label})
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
       {/* Gated Scan Promotion Banner */}
       <section className="section-padding gate-banner-section">
         <div className="glass-card gate-banner">
           <h3>Ready to Scan Your Food?</h3>
+          <p style={{ fontStyle: "italic", fontSize: "16px", color: "var(--color-primary-dark)", margin: "4px 0 16px 0", fontWeight: "700" }}>
+            Scan Karega India, Healthy banega India
+          </p>
           {user ? (
             <>
               <p>You are successfully logged in! Access your personal scanner dashboard now to analyze food label ingredients in real-time.</p>

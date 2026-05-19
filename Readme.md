@@ -2,7 +2,9 @@
 
 Scan Karega India is an AI-powered food quality monitoring and label analysis platform. It enables users to upload photos of packaged food and drink labels, instantly extracts ingredient list and nutrition details using **Google Gemini Vision**, computes a comprehensive health score based on official FSSAI/BIS guidelines, and suggests cleaner, local Indian alternatives.
 
-**Tagline:** *Scan Karega India, Healthy India, Swasth India.*
+**Tagline:** *Scan Karega India, Healthy banega India*
+
+Ready to Scan Your Food?
 
 ---
 

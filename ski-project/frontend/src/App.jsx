@@ -156,7 +156,7 @@ export default function App() {
             onLogout={handleLogout}
           />
         ) : (
-          <Home onLoginClick={handleLoginClick} user={user} onScanClick={() => setActiveView("dashboard")} />
+          <Home token={token} onLoginClick={handleLoginClick} user={user} onScanClick={() => setActiveView("dashboard")} />
         )}
       </main>
 

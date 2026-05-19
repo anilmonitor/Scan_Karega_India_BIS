@@ -67,9 +67,11 @@ export default function Dashboard({ user, token, API_URL, onUserUpdate, onLogout
     fetchHistory();
   }, [token]);
 
-  const handleScanSuccess = () => {
+  const handleScanSuccess = (scannedItem) => {
     fetchHistory(); // Refresh history list
-    setActiveTab("history"); // Automatically show history tab to see the saved scan
+    if (scannedItem) {
+      setSelectedScan(scannedItem); // Immediately display scan details in modal popup
+    }
   };
 
   const getScoreColor = (score) => {
@@ -319,14 +321,33 @@ export default function Dashboard({ user, token, API_URL, onUserUpdate, onLogout
             {/* Modal Header */}
             <div className="modal-header">
               <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                <img
-                  src={selectedScan.image_url}
-                  alt="thumbnail"
-                  className="modal-thumbnail-img"
-                  onError={(e) => {
-                    e.target.src = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c";
-                  }}
-                />
+                {selectedScan.image_url === "barcode_scan" ? (
+                  <div style={{
+                    width: 50,
+                    height: 50,
+                    borderRadius: 8,
+                    background: "var(--color-primary-light)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    border: "1px solid var(--color-primary)",
+                    flexShrink: 0
+                  }}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary-dark)" strokeWidth="2.5">
+                      <path d="M3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2z" />
+                      <path d="M7 7h2v10H7zm4 0h1v10h-1zm3 0h3v10h-3zm5 0h1v10h-1z" />
+                    </svg>
+                  </div>
+                ) : (
+                  <img
+                    src={selectedScan.image_url}
+                    alt="thumbnail"
+                    className="modal-thumbnail-img"
+                    onError={(e) => {
+                      e.target.src = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c";
+                    }}
+                  />
+                )}
                 <div>
                   <h3 className="modal-title">{selectedScan.product?.name || "Unknown Product"}</h3>
                   <p className="modal-subtitle">{selectedScan.product?.brand || "Scanned Label"}</p>
