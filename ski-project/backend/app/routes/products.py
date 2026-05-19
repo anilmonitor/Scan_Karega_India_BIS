@@ -117,6 +117,52 @@ BARCODE_CATALOG = {
         "allergens": [],
         "healthy_alternatives": [],
         "notes": "Contains high natural fruit pulp, zero added sugars, and fortified with Vitamin C."
+    },
+    "8901063022277": {
+        "name": "Britannia NutriChoice Digestive",
+        "brand": "Britannia",
+        "ingredients": "Whole Wheat Flour (52%), Wheat Bran, Edible Vegetable Oil, Sugar, Maltodextrin, Dietary Fibre, Raising Agents (500(ii), 503(ii))",
+        "nutrition": {
+            "energy_kcal": 486.0,
+            "fat": 21.0,
+            "saturated_fat": 4.0,
+            "sugars": 8.0,
+            "sodium": 0.4,
+            "fiber": 6.0,
+            "proteins": 8.5
+        },
+        "nutriscore": "b",
+        "nova_group": 2,
+        "additives_detected": ["E500(ii) (Raising Agent)", "E503(ii) (Raising Agent)"],
+        "allergens": ["Wheat", "Gluten"],
+        "healthy_alternatives": [
+            {"name": "McVitie's Digestive Active", "reason": "Another organic whole-grain alternative biscuit rich in natural dietary fibers and low in sugar content."},
+            {"name": "Sunfeast Farmlite Digestive Oats & Ragi", "reason": "Millet-based digestive biscuit containing natural dietary fiber and zero artificial sweeteners."}
+        ],
+        "notes": "Healthy biscuits recommendation: contains high whole wheat percentage and substantial dietary fibers."
+    },
+    "8901063142272": {
+        "name": "Oreo Original Cream Biscuits",
+        "brand": "Cadbury Oreo",
+        "ingredients": "Sugar, Refined Wheat Flour (Maida), Vegetable Fat, Cocoa Powder, Fructose Syrup, Cornstarch, Raising Agents (500(ii), 503(ii)), Salt, Emulsifier (322)",
+        "nutrition": {
+            "energy_kcal": 480.0,
+            "fat": 20.0,
+            "saturated_fat": 9.0,
+            "sugars": 38.0,
+            "sodium": 0.54,
+            "fiber": 1.0,
+            "proteins": 5.0
+        },
+        "nutriscore": "e",
+        "nova_group": 4,
+        "additives_detected": ["E500(ii) (Raising Agent)", "E503(ii) (Raising Agent)", "E322 (Emulsifier)"],
+        "allergens": ["Wheat", "Soy", "Gluten"],
+        "healthy_alternatives": [
+            {"name": "Britannia NutriChoice Digestive", "reason": "Contains 52% whole wheat flour, high dietary fiber, and significantly lower sugar than Oreo sandwich cookies."},
+            {"name": "Sunfeast Farmlite Oats & Almonds", "reason": "Baked oats biscuit with organic oats, sweetened with honey and high dietary fiber."}
+        ],
+        "notes": "Extremely high sugar content (38g sugar per 100g) and highly processed fats. Recommended healthier related biscuits."
     }
 }
 

@@ -57,7 +57,9 @@ Rules:
 - Sodium: return in g/100g (so 500mg = 0.5)
 - If only serving size values shown, estimate per-100g by dividing accordingly
 - Extract ALL ingredients even if the text is small
-- If the scanned product is unhealthy (e.g. high sugar, high sodium, ultra-processed NOVA group 4, high saturated fat, or many additives), provide 1-2 healthier, commonly available Indian food/drink alternatives in the `healthy_alternatives` array. Otherwise, keep it empty or suggest a simple whole-food alternative."""
+- Suggest 2-3 products in the `healthy_alternatives` array based on whether the product is healthy (e.g. low sugar, low sodium, low saturated fat, NOVA group 1-2) or unhealthy (e.g. high sugar, high sodium, ultra-processed NOVA group 4, high saturated fat, or many additives):
+  1. If the scanned product is HEALTHY: Recommend 2-3 other healthy, high-quality popular Indian products of the EXACT SAME category/type (e.g., if you scan a healthy whole-grain biscuit, recommend other healthy whole-grain biscuit brands like 'Sunfeast Farmlite Oats' or 'NutriChoice Digestive'; if a healthy juice, recommend other natural unsweetened juices).
+  2. If the scanned product is UNHEALTHY: Recommend 2-3 healthier related items commonly available in India (e.g., if you scan an unhealthy biscuit, recommend healthy whole-grain fiber biscuits; if you scan unhealthy fried potato chips, recommend baked beetroot chips or roasted makhana; if you scan sugary cola, recommend stevia-sweetened fruit juices, coconut water, or buttermilk)."""
 
 
 def _extract_text_from_gemini(payload: dict) -> str:

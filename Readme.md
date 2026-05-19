@@ -23,6 +23,7 @@ The SKI platform includes the following user-facing and backend features:
 
 3. **Dual-Mode Scanner (Upload & Live Camera)**
    - Supports both drag-and-drop file upload and real-time device camera scanning.
+   - **Homepage & Dashboard Integration**: Embedded directly on the homepage above the footer (with a glassmorphic blur overlay prompting guest users to sign in) and inside the profile dashboard.
    - **Label Capture Mode**: Take a photo of the food ingredients label using a web camera, then send it to the Gemini OCR backend.
    - **Barcode Scanner Mode**: Point the camera at a product barcode to automatically detect and decode the value (uses browser's native `BarcodeDetector` API) and query the catalog backend. Also provides manual barcode search and quick-test mock buttons for instant lookup testing.
    - Integrates with the Google Gemini Pro API (`gemini-2.5-flash` model) to perform OCR and structured data extraction from captured product labels.
@@ -35,19 +36,20 @@ The SKI platform includes the following user-facing and backend features:
      - 🟡 **Moderate** (Score 50 - 74)
      - 🔴 **Needs Caution** (Score 0 - 49)
 
-5. **Interactive Clean Alternatives Engine**
-   - Automatically detects if the scanned food is unhealthy (high sugars, sodium, palm oil, or excessive additives).
-   - Generates organic, traditional, and clean local Indian product recommendations (e.g., swapping a high-sugar Mango drink with stevia-sweetened *i-Drink Mango*).
+5. **Smart Category Recommendations Engine**
+   - Implements context-sensitive recommendations based on the calculated health score:
+     - **For Healthy Products (Score >= 70)**: Recommends other popular, high-quality healthy choices *within the exact same category* (e.g. scanning *Britannia NutriChoice Digestive* suggests *McVitie's Digestive Active* and *Sunfeast Farmlite Digestive Oats & Ragi*).
+     - **For Unhealthy Products (Score < 70)**: Recommends healthier related alternatives (e.g. scanning *Oreo Cream Biscuits* suggests *Britannia NutriChoice Digestive*; scanning *Lays Potato Chips* suggests *Baked Beetroot Chips*).
 
 6. **Interactive Scan History Gallery & Detailed Drawer**
    - Keep a history of all scan profiles in MongoDB.
    - Beautiful dashboard grid with hover effects displaying product cards.
    - Clicking a card opens a detailed glassmorphic drawer containing:
      - Circular health score indicator.
+     - Dynamic recommendations block showing either category-matching healthy products or healthy alternative swaps depending on the scanned product's score.
      - Highlighted health metrics reasons (e.g., "High sugar content").
      - Clear nutrition facts table per 100g.
      - Detected chemical additives and allergens.
-     - Custom recommendations for healthy swaps.
      - Full ingredient list text.
 
 7. **Floating AI Chat Health Assistant Bot**

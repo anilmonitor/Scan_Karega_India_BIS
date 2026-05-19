@@ -710,6 +710,8 @@ export default function ImageUpload({ token, onScanSuccess }) {
                   <button onClick={() => handleBarcodeDetected("8902080004035")} className="mock-barcode-btn">🥤 Coca-Cola</button>
                   <button onClick={() => handleBarcodeDetected("8901207040510")} className="mock-barcode-btn">🌽 Kurkure Munch</button>
                   <button onClick={() => handleBarcodeDetected("8901058895053")} className="mock-barcode-btn">🥭 i-Drink Mango</button>
+                  <button onClick={() => handleBarcodeDetected("8901063022277")} className="mock-barcode-btn">🍪 NutriChoice (Healthy)</button>
+                  <button onClick={() => handleBarcodeDetected("8901063142272")} className="mock-barcode-btn">🍪 Oreo Cream (Unhealthy)</button>
                 </div>
               </div>
             </div>

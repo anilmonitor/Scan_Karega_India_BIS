@@ -412,11 +412,17 @@ export default function Dashboard({ user, token, API_URL, onUserUpdate, onLogout
               <div className="modal-recommendation-block">
                 <h4 className="recommendation-title" style={{ display: "flex", alignItems: "center", gap: 6 }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ color: "var(--color-primary)" }}>
-                    <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
-                    <path d="M9 18h6" />
-                    <path d="M10 22h4" />
+                    {selectedScan.health_score.score >= 70 ? (
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    ) : (
+                      <>
+                        <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
+                        <path d="M9 18h6" />
+                        <path d="M10 22h4" />
+                      </>
+                    )}
                   </svg>
-                  Healthier Alternatives Recommended
+                  {selectedScan.health_score.score >= 70 ? "More Healthy Choices Recommended" : "Healthier Alternatives Recommended"}
                 </h4>
                 {selectedScan.healthy_alternatives && selectedScan.healthy_alternatives.length > 0 ? (
                   <div className="alternatives-list">
@@ -442,7 +448,10 @@ export default function Dashboard({ user, token, API_URL, onUserUpdate, onLogout
                       </svg>
                     </span>
                     <p style={{ margin: 0, fontSize: 13, color: 'var(--color-text-secondary)' }}>
-                      No alternative recommendations needed! This product already complies with a high healthy nutrition index.
+                      {selectedScan.health_score.score >= 70 
+                        ? "This product complies with a high healthy nutrition index. Enjoy!"
+                        : "No alternative recommendations available."
+                      }
                     </p>
                   </div>
                 )}
