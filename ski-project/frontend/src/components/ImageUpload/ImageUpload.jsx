@@ -385,24 +385,13 @@ export default function ImageUpload({ token, onScanSuccess }) {
 
       {/* Main Mode Toggle Tabs */}
       {status !== "done" && !preview && (
-        <div style={{ display: "flex", background: "var(--color-background-secondary)", borderRadius: 12, padding: 4, border: "1px solid var(--color-border-secondary)", marginBottom: 20 }}>
+        <div className="scanner-toggle-tabs">
           <button
             onClick={() => setScanMode("upload")}
+            className="scanner-toggle-btn"
             style={{
-              flex: 1,
-              padding: "10px 12px",
-              border: "none",
               background: scanMode === "upload" ? "var(--color-background-primary)" : "transparent",
               color: scanMode === "upload" ? "var(--color-primary)" : "var(--color-text-secondary)",
-              fontWeight: 700,
-              fontSize: 13,
-              borderRadius: 8,
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 8,
-              transition: "all 0.2s",
               boxShadow: scanMode === "upload" ? "0 2px 8px rgba(15, 23, 42, 0.05)" : "none"
             }}
           >
@@ -415,21 +404,10 @@ export default function ImageUpload({ token, onScanSuccess }) {
           </button>
           <button
             onClick={() => setScanMode("camera")}
+            className="scanner-toggle-btn"
             style={{
-              flex: 1,
-              padding: "10px 12px",
-              border: "none",
               background: scanMode === "camera" ? "var(--color-background-primary)" : "transparent",
               color: scanMode === "camera" ? "var(--color-primary)" : "var(--color-text-secondary)",
-              fontWeight: 700,
-              fontSize: 13,
-              borderRadius: 8,
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 8,
-              transition: "all 0.2s",
               boxShadow: scanMode === "camera" ? "0 2px 8px rgba(15, 23, 42, 0.05)" : "none"
             }}
           >
@@ -481,37 +459,23 @@ export default function ImageUpload({ token, onScanSuccess }) {
       {scanMode === "camera" && !preview && status !== "done" && (
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           {/* Sub-toggle: Scan Barcode vs Take Label Photo */}
-          <div style={{ display: "flex", background: "var(--color-border-tertiary)", padding: 4, borderRadius: 10, gap: 4 }}>
+          <div className="scanner-sub-toggle-tabs">
             <button
               onClick={() => setCameraMode("barcode")}
+              className="scanner-sub-toggle-btn"
               style={{
-                flex: 1,
-                padding: "8px 10px",
-                border: "none",
                 background: cameraMode === "barcode" ? "var(--color-primary)" : "transparent",
                 color: cameraMode === "barcode" ? "#fff" : "var(--color-text-secondary)",
-                borderRadius: 6,
-                fontWeight: 700,
-                fontSize: 12,
-                cursor: "pointer",
-                transition: "all 0.2s"
               }}
             >
               Scan Barcode
             </button>
             <button
               onClick={() => setCameraMode("label")}
+              className="scanner-sub-toggle-btn"
               style={{
-                flex: 1,
-                padding: "8px 10px",
-                border: "none",
                 background: cameraMode === "label" ? "var(--color-primary)" : "transparent",
                 color: cameraMode === "label" ? "#fff" : "var(--color-text-secondary)",
-                borderRadius: 6,
-                fontWeight: 700,
-                fontSize: 12,
-                cursor: "pointer",
-                transition: "all 0.2s"
               }}
             >
               Capture Label Photo
@@ -735,30 +699,19 @@ export default function ImageUpload({ token, onScanSuccess }) {
             )}
           </div>
 
-          <div style={{ display: "flex", gap: 8 }}>
+          <div className="scanner-preview-actions">
             <button
               onClick={analyse}
               disabled={status === "uploading"}
-              style={{
-                flex: 1,
-                padding: "12px 0",
-                background: "var(--color-primary)",
-                color: "#fff",
-                border: "none",
-                borderRadius: 10,
-                fontSize: 14,
-                fontWeight: 700,
-                cursor: "pointer",
-                opacity: status === "uploading" ? 0.6 : 1,
-                transition: "all 0.2s"
-              }}
+              className="scanner-btn-confirm"
+              style={{ opacity: status === "uploading" ? 0.6 : 1 }}
             >
               {status === "uploading" ? "Analysing…" : "Confirm & Analyse Photo"}
             </button>
             <button
               onClick={reset}
               disabled={status === "uploading"}
-              style={{ padding: "12px 18px", background: "transparent", color: "var(--color-text-secondary)", border: "1px solid var(--color-border-secondary)", borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: "pointer" }}
+              className="scanner-btn-retake"
             >
               Retake / Remove
             </button>

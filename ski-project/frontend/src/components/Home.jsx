@@ -707,8 +707,8 @@ export default function Home({ token, onLoginClick, user, onScanClick, onHomeSca
             <h2 style={{ fontSize: "36px", fontWeight: "900", color: "var(--color-text-primary)", margin: 0, lineHeight: "1.15", fontFamily: "var(--font-heading)" }}>
               Ready to Scan Your Food?
             </h2>
-            <p style={{ fontStyle: "italic", fontSize: "16px", color: "var(--color-primary-dark)", margin: "0", fontWeight: "700" }}>
-              Scan Karega India, Healthy banega India
+            <p className="tagline-text">
+              Scan Karega India, <br />Healthy banega India
             </p>
             <p style={{ fontSize: "15px", color: "var(--color-text-secondary)", lineHeight: "1.6", margin: 0 }}>
               Use our dual-mode scanner to instantly scan packaged food ingredients. Upload any packaging photo or point your camera to decode barcodes and ingredients list using advanced AI.
