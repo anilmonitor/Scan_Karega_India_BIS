@@ -354,6 +354,13 @@ export default function ImageUpload({ token, onScanSuccess }) {
     };
   }, []);
 
+  // Sync stream to video element when it mounts/updates
+  useEffect(() => {
+    if (videoRef.current && cameraStream) {
+      videoRef.current.srcObject = cameraStream;
+    }
+  }, [cameraStream]);
+
   const p = result?.product;
   const hs = result?.health_score;
   const n = p?.nutrition;
@@ -515,7 +522,7 @@ export default function ImageUpload({ token, onScanSuccess }) {
           <div style={{ position: "relative", borderRadius: 16, overflow: "hidden", border: "1.5px solid var(--color-border-secondary)", background: "#000", height: 260, display: "flex", alignItems: "center", justifyContent: "center" }}>
             {cameraStream ? (
               <>
-                <video ref={videoRef} autoPlay playsInline style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                <video ref={videoRef} autoPlay playsInline muted style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 
                 {/* Laser scan lines */}
                 <div style={{
